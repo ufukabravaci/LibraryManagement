@@ -1,4 +1,3 @@
-using System.IO.Pipelines;
 using LibraryManagement.Utils;
 using Microsoft.Data.SqlClient;
 
@@ -26,7 +25,7 @@ public class BookService
         }
         catch (SqlException ex)
         {
-            System.Console.WriteLine("Error :" + ex.Message);
+            System.Console.WriteLine("Veritabanı hatası: " + ex.Message);
         }
         finally
         {
@@ -34,20 +33,19 @@ public class BookService
         }
         return result;
     }
-    public int DeleteBook(Book book)
+    public int DeleteBook(int id)
     {
         int result = 0;
         try
         {
             string query = "DELETE FROM BOOKS WHERE BookID = @BookId";
             SqlCommand command = new(query, _db.GetConnection());
-            command.Parameters.AddWithValue("@BookId", book.BookId);
+            command.Parameters.AddWithValue("@BookId", id);
             result = Convert.ToInt32(command.ExecuteScalar()); // id'yi aldık.
-            System.Console.WriteLine($"{book.Title} isimli kitap kütüphaneden silindi.");
         }
-        catch(SqlException ex)
+        catch (SqlException ex)
         {
-            System.Console.WriteLine($"{book.Title} Eklenirken bir hata oluştu. " + ex.Message);
+            System.Console.WriteLine("Veritabanı hatası: " + ex.Message);
         }
         finally
         {
@@ -67,11 +65,10 @@ public class BookService
             command.Parameters.AddWithValue("@PublishYear", book.PublishYear);
             command.Parameters.AddWithValue("@BookID", book.BookId);
             result = command.ExecuteNonQuery();
-            System.Console.WriteLine($"{book.Title} güncellendi.");
         }
         catch (SqlException ex)
         {
-            System.Console.WriteLine($"{book.Title} güncellenemedi. Error: " + ex.Message);
+            System.Console.WriteLine("Veritabanı hatası: " + ex.Message);
         }
         finally
         {
@@ -79,5 +76,95 @@ public class BookService
         }
         return result;
     }
+    public List<Book> GetAllBooks()
+    {
+        List<Book> books = new();
+        try
+        {
+            string query = "SELECT * FROM Books";
+            SqlCommand command = new(query, _db.GetConnection());
+            SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                Book book = new();
+                book.BookId = Convert.ToInt32(reader["BookID"]);
+                book.Title = reader["Title"].ToString();
+                book.PublishYear = Convert.ToInt32(reader["PublishYear"]);
+                book.ISBN = reader["ISBN"].ToString();
+                books.Add(book);
+            }
+        }
+        catch (SqlException ex)
+        {
+            System.Console.WriteLine("Veritabanı hatası: " + ex.Message);
+        }
+        finally
+        {
+            _db.CloseConnection();
+        }
+        return books;
+    }
 
+    public Book GetBookById(int bookId)
+    {
+        Book book = new();
+        try
+        {
+            string query = "SELECT * FROM Books WHERE BookID = @BookID";
+            SqlCommand command = new(query, _db.GetConnection());
+            command.Parameters.AddWithValue("@BookID", bookId);
+            SqlDataReader reader = command.ExecuteReader();
+            if (reader.Read())
+            {
+                book = new Book
+                {
+                    BookId = Convert.ToInt32(reader["BookID"]),
+                    Title = reader["Title"].ToString(),
+                    PublishYear = Convert.ToInt32(reader["PublishYear"]),
+                    ISBN = reader["ISBN"].ToString()
+                };
+            }
+        }
+        catch (SqlException ex)
+        {
+            System.Console.WriteLine("Veritabanı hatası: " + ex.Message);
+        }
+        finally
+        {
+            _db.CloseConnection();
+        }
+        return book;
+    }
+
+    public List<Book> GetBooksByTitle(string title)
+    {
+        List<Book> books = new List<Book>();
+        try
+        {
+            string query = "SELECT * FROM Books WHERE Title LIKE @Title";
+            SqlCommand command = new(query, _db.GetConnection());
+            command.Parameters.AddWithValue("@Title", "%" + title + "%");
+            SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                Book book = new Book
+                {
+                    BookId = Convert.ToInt32(reader["BookID"]),
+                    Title = reader["Title"].ToString(),
+                    PublishYear = Convert.ToInt32(reader["PublishYear"]),
+                    ISBN = reader["ISBN"].ToString()
+                };
+                books.Add(book);
+            }
+        }
+        catch (SqlException ex)
+        {
+            System.Console.WriteLine("Veritabanı hatası: " + ex.Message);
+        }
+        finally
+        {
+            _db.CloseConnection();
+        }
+        return books;
+    }
 }
