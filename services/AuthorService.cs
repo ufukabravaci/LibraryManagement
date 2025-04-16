@@ -12,6 +12,9 @@ public class AuthorService
         _db = db;
     }
 
+    
+
+
     public int AddAuthor(Author author)
     {
         int result = 0;
@@ -103,6 +106,38 @@ public class AuthorService
             _db.CloseConnection();
         }
         return authors;
+    }
+
+    public Author? GetAuthorById(int authorId)
+    {
+        // bulamazsak null dönmesi lazım. Yeni author nesnesi oluşturursak bulamama durumunda da bir nesne dönüyoruz.
+        Author? author = null; 
+        try
+        {
+            string query = "SELECT * FROM Authors WHERE AuthorID = @AuthorID";
+            SqlCommand command = new(query, _db.GetConnection());
+            command.Parameters.AddWithValue("@AuthorID", authorId);
+            SqlDataReader reader = command.ExecuteReader();
+            if (reader.Read())
+            {
+                author = new Author
+                {
+                    AuthorId = Convert.ToInt32(reader["AuthorID"]),
+                    FirstName = reader["FirstName"].ToString(),
+                    LastName = reader["LastName"].ToString()
+                };
+            }
+            reader.Close();
+        }
+        catch (SqlException ex)
+        {
+            System.Console.WriteLine("Veritabanı hatası: " + ex.Message);
+        }
+        finally
+        {
+            _db.CloseConnection();
+        }
+        return author;
     }
 
 }
