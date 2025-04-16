@@ -1,1 +1,14 @@
-{}
+{
+    "terminal.integrated.defaultProfile.windows": "Command Prompt",
+    "terminal.integrated.profiles.windows": {
+      "Command Prompt": {
+        "path": ["${env:windir}\\System32\\cmd.exe"]
+      }
+    },
+    "terminal.integrated.env.windows": {
+      "DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION": "1",
+      "DOTNET_SYSTEM_GLOBALIZATION_INVARIANT": "false"
+    },
+    "files.encoding": "utf8"
+  }
+  

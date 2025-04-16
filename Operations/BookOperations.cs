@@ -4,7 +4,7 @@ using LibraryManagement.Services;
 using LibraryManagement.Models;
 using System.IO.Pipelines;
 
-namespace LibraryManagement.UI;
+namespace LibraryManagement.Operations;
 
 public class BookOperations
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using LibraryManagement.Services;
 using LibraryManagement.Models;
 
-namespace LibraryManagement.UI;
+namespace LibraryManagement.Operations;
 
 public class AuthorOperations
 {
@@ -98,7 +98,7 @@ public class AuthorOperations
         }
         else
         {
-            Console.WriteLine("Geçersiz ID formatı.");
+            Console.WriteLine("ID değeri sayısal bir değer olmalıdır.");
         }
     }
 

@@ -1,14 +1,10 @@
-﻿using System;
 using LibraryManagement.Utils;
 using LibraryManagement.Services;
-using LibraryManagement.Models;
-using LibraryManagement.UI;
-//Türkçe karakterler konsolda sorun çıkarıyordu.
-Console.OutputEncoding = System.Text.Encoding.UTF8;
-Console.InputEncoding = System.Text.Encoding.UTF8;
-//-----------------------------------------------------
+using LibraryManagement.Operations;
+
 var db = new DB();
 bool isMainMenuActive = true;
+
 //Create services
 var bookService = new BookService(db);
 var authorService = new AuthorService(db);
