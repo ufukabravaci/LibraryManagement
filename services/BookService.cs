@@ -116,13 +116,10 @@ public class BookService
             SqlDataReader reader = command.ExecuteReader();
             if (reader.Read())
             {
-                book = new Book
-                {
-                    BookId = Convert.ToInt32(reader["BookID"]),
-                    Title = reader["Title"].ToString(),
-                    PublishYear = Convert.ToInt32(reader["PublishYear"]),
-                    ISBN = reader["ISBN"].ToString()
-                };
+                book.BookId = Convert.ToInt32(reader["BookID"]);
+                book.Title = reader["Title"].ToString();
+                book.PublishYear = Convert.ToInt32(reader["PublishYear"]);
+                book.ISBN = reader["ISBN"].ToString();
             }
         }
         catch (SqlException ex)

@@ -110,4 +110,59 @@ public class MemberService
         }
         return members;
     }
+
+    public Member GetMemberById(int memberID)
+    {
+        Member member = new();
+        try
+        {
+            string query = "SELECT * FROM Members WHERE MemberID = @MemberID";
+            SqlCommand command = new(query, _db.GetConnection());
+            command.Parameters.AddWithValue("@MemberID", memberID);
+            SqlDataReader reader = command.ExecuteReader();
+            if (reader.Read())
+            {
+                member.MemberId = Convert.ToInt32(reader["MemberID"]);
+                member.FirstName = reader["FirstName"].ToString();
+                member.LastName = reader["LastName"].ToString();
+                member.Email = reader["Email"].ToString();
+                member.Phone = reader["Phone"].ToString();
+            }
+        }
+        catch (SqlException ex)
+        {
+            System.Console.WriteLine("Veritabanı hatası: " + ex.Message);
+        }
+        finally
+        {
+            _db.CloseConnection();
+        }
+        return member;
+    }
+
+    // Bu metot database'de tanımladığım bir fonksiyonu kullanmaktadır.
+    public string GetMemberFullNameByID(int memberID)
+    {
+        string? fullName = "";
+        try
+        {
+            string query = "SELECT dbo.fn_GetFullName(FirstName, LastName) fullName FROM Members WHERE MemberID = @MemberID";
+            SqlCommand command = new SqlCommand(query, _db.GetConnection());
+            command.Parameters.AddWithValue("@MemberID", memberID);
+            SqlDataReader reader = command.ExecuteReader();
+            if (reader.Read())
+            {
+                fullName = reader["fullName"].ToString();
+            }
+        }
+        catch (SqlException ex)
+        {
+            System.Console.WriteLine("Veritabanı hatası: " + ex.Message);
+        }
+        finally
+        {
+            _db.CloseConnection();
+        }
+        return fullName !=null ? fullName : "";
+    }
 }

@@ -14,7 +14,7 @@ public class DB
             if (_connection.State == System.Data.ConnectionState.Closed)
             {
                 _connection.Open();
-                System.Console.WriteLine("Connection Opened.");
+                
             }
         }
         catch (SqlException ex)
@@ -29,7 +29,7 @@ public class DB
           if(_connection.State == System.Data.ConnectionState.Open)
           {
             _connection.Close();
-            System.Console.WriteLine("Connection Closed.");
+            
           }
         } catch (SqlException ex)
         {

@@ -8,9 +8,12 @@ bool isMainMenuActive = true;
 //Create services
 var bookService = new BookService(db);
 var authorService = new AuthorService(db);
+var loanService = new LoanService(db);
+var memberService = new MemberService(db);
 //Create operations
 var bookOperations = new BookOperations(bookService);
 var authorOperations = new AuthorOperations(authorService);
+var loanOperations = new LoanOperations(loanService, bookService, memberService);
 
 while (isMainMenuActive)
 {
@@ -35,7 +38,7 @@ while (isMainMenuActive)
             authorOperations.AuthorOperationsMenu();
             break;
         case "3":
-            LoanOperationsMenu();
+            loanOperations.LoanOperationsMenu();
             break;
         case "4":
             MemberOperationsMenu();
@@ -53,10 +56,7 @@ while (isMainMenuActive)
 }
 
 
-void LoanOperationsMenu()
-{
-    Console.WriteLine("Kira İşlemleri Menüsü (Henüz implemente edilmedi)");
-}
+
 
 void MemberOperationsMenu()
 {
