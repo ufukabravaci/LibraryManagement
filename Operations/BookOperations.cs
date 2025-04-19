@@ -30,7 +30,8 @@ public class BookOperations
             Console.WriteLine("4 - Bütün Kitapları Getir");
             Console.WriteLine("5 - ID ile Kitap Getir");
             Console.WriteLine("6 - Kitap İsmi ile Kitap Getir");
-            Console.WriteLine("7 - Ana Menüye Dön");
+            Console.WriteLine("7 - En çok kiralanmış 10 kitap");
+            Console.WriteLine("8 - Ana Menüye Dön");
             Console.Write("Lütfen bir işlem seçin: ");
 
             string? bookMenuSelection = Console.ReadLine();
@@ -56,6 +57,9 @@ public class BookOperations
                     GetBooksByTitle();
                     break;
                 case "7":
+                    GetMostLoaned10Books();
+                    break;
+                case "8":
                     isBookMenuActive = false;
                     Console.WriteLine("Ana menüye dönülüyor...");
                     break;
@@ -204,5 +208,18 @@ public class BookOperations
             }
         }
         else System.Console.WriteLine("Geçerli bir kitap ismi giriniz.");
+    }
+
+
+    private void GetMostLoaned10Books()
+    {
+        var books = _bookService.Get10MostLoanedBooks();
+
+        Console.WriteLine("En Çok Kiralanan 10 Kitap:\n");
+
+        foreach (var book in books)
+        {
+            Console.WriteLine($"Kitap ID: {book.BookId}, Başlık  : {book.Title}, Yazar   : {book.Author}, Kiralanma Sayısı: {book.LoanCount}");
+        }
     }
 }

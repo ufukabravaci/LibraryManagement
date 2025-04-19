@@ -28,6 +28,8 @@ public class AuthorOperations
             Console.WriteLine("3 - Yazar Bilgilerini Güncelle");
             Console.WriteLine("4 - Bütün Yazarları Getir");
             Console.WriteLine("5 - ID ile Yazar Getir");
+            Console.WriteLine("6 - En çok kitabı kiralanmış 10 yazar");
+            Console.WriteLine("7 - En çok kitabı bulunan yazar");
             Console.WriteLine("6 - Ana Menüye Dön");
             Console.Write("Lütfen bir işlem seçin: ");
 

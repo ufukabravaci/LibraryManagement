@@ -1,3 +1,4 @@
+using LibraryManagement.Models;
 using LibraryManagement.Utils;
 using Microsoft.Data.SqlClient;
 
@@ -164,4 +165,59 @@ public class BookService
         }
         return books;
     }
+
+    //Bu metot yazdığım uygulamadaki en karışık query'e ait.
+    //Database'de tanımlı olan bir fonksiyonu kullanıyor.
+    //Veriyi karşılayabilmek için yeni bir model oluşturdum.
+    public List<MostLoanedBook> Get10MostLoanedBooks()
+    {
+        List<MostLoanedBook> books = new();
+        try
+        {
+            string query = @"
+        SELECT TOP 10 
+            l.BookID, 
+            COUNT(l.BookID) AS LoanCount, 
+            b.Title, 
+            b.PublishYear,
+            b.ISBN,
+            dbo.fn_GetFullName(a.FirstName, a.LastName) AS Author
+        FROM Loans l
+        INNER JOIN Books b ON l.BookID = b.BookID
+        INNER JOIN BookAuthor ba ON b.BookID = ba.BookID
+        INNER JOIN Authors a ON ba.AuthorID = a.AuthorID
+        GROUP BY 
+            l.BookID, 
+            b.Title, 
+            b.PublishYear,
+            b.ISBN,
+            a.FirstName, 
+            a.LastName
+        ORDER BY LoanCount DESC";
+
+            SqlCommand command = new(query, _db.GetConnection());
+            SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                MostLoanedBook book = new();
+                book.BookId = Convert.ToInt32(reader["BookID"]);
+                book.Title = reader["Title"].ToString();
+                book.LoanCount = Convert.ToInt32(reader["LoanCount"]);
+                book.Author = reader["Author"].ToString();
+                books.Add(book);
+            }
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine("Veritabanı hatası: " + ex.Message);
+        }
+        finally
+        {
+            _db.CloseConnection();
+        }
+
+        return books;
+    }
+
 }

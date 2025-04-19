@@ -29,14 +29,13 @@ public class LoanOperations
             Console.WriteLine("----------------------------------");
             Console.WriteLine("1 - Kitap Kiralama İşlemi");
             Console.WriteLine("2 - Kitap İade Alma İşlemi");
-            Console.WriteLine("3 - Geri getirme tarihi gecikmiş kiralamalar ve tüm bilgileri");
-            Console.WriteLine("4 - 1 Haftadan kısa süren kiralama işlemleri ve üye bilgileri");
-            Console.WriteLine("5 - Şu anda kirada olan tüm kitaplar");
-            Console.WriteLine("6 - Üzerinde Aktif Kitap Olan Üyeler");
-            Console.WriteLine("7 - Üyenin tüm kiralama geçmişi kitap ve yazar bilgileriyle beraber");
-            Console.WriteLine("8 - En çok kiralanan 10 kitap");
-            Console.WriteLine("9 - En çok kitap kiralayan 10 üye");
-            Console.WriteLine("10 - Ana Menüye Dön");
+            Console.WriteLine("3 - Kiralama İşlemini sil");
+            Console.WriteLine("4 - Kiralama İşleminde değişiklik yap");
+            Console.WriteLine("5 - Geri getirme tarihi gecikmiş kiralamalar ve tüm bilgileri");
+            Console.WriteLine("6 - 1 Haftadan kısa süren kiralama işlemleri ve üye bilgileri");
+            Console.WriteLine("7 - Şu anda aktif olan tüm kiralama işlemleri");
+            Console.WriteLine("8 - Üzerinde Aktif Kitap Olan Üyeler");
+            Console.WriteLine("9 - Ana menüye dön");
             Console.Write("Lütfen bir işlem seçin: ");
 
             string? loanMenuSelection = Console.ReadLine();
@@ -49,27 +48,24 @@ public class LoanOperations
                     ReturnBook();
                     break;
                 case "3":
-                    ListOverdueLoansWithDetails();
+                    DeleteLoan();
                     break;
                 case "4":
-                    ListLessThenOneWeekLoans();
+                    UpdateLoan();
                     break;
                 case "5":
-                    ListAllLoanedBooks();
+                    ListOverdueLoansWithDetails();
                     break;
                 case "6":
-                    ListMembersWithActiveLoans();
+                    ListLessThenOneWeekLoans();
                     break;
                 case "7":
-                    ListMemberLoanHistoryWithDetails();
+                    ListCurrentlyLoanedBooks();
                     break;
                 case "8":
-                    ListTop10MostLoanedBooks();
+                    ListMembersWithActiveLoans();
                     break;
                 case "9":
-                    ListTop10MembersWhoLoanedMost();
-                    break;
-                case "10":
                     isLoanMenuActive = false;
                     Console.WriteLine("Ana menüye dönülüyor...");
                     break;
@@ -82,7 +78,7 @@ public class LoanOperations
     private void LendBook()
     {
         System.Console.WriteLine("Kitap kiralama işlemi");
-        System.Console.WriteLine("Kitap adı: ");
+        System.Console.WriteLine("Kitap ID: ");
         if (!int.TryParse(Console.ReadLine(), out int bookId))
         {
             Console.WriteLine("Geçersiz kitap ID formatı.");
@@ -163,6 +159,89 @@ public class LoanOperations
         }
     }
 
+    private void DeleteLoan()
+    {
+        Console.Write("Silmek istediğiniz LoanID: ");
+        if (!int.TryParse(Console.ReadLine(), out int loanID))
+        {
+            Console.WriteLine("Geçersiz LoanID formatı.");
+            return;
+        }
+
+        try
+        {
+            int result = _loanService.DeleteLoan(loanID);
+            if (result > 0)
+            {
+                Console.WriteLine("Kiralama kaydı başarıyla silindi.");
+            }
+            else
+            {
+                Console.WriteLine("Kiralama kaydı silinirken bir sorun oluştu.");
+            }
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine("Veritabanı hatası: " + ex.Message);
+        }
+    }
+
+    private void UpdateLoan()
+    {
+        Console.Write("Güncellemek istediğiniz LoanID: ");
+        if (!int.TryParse(Console.ReadLine(), out int loanID))
+        {
+            Console.WriteLine("Geçersiz LoanID formatı.");
+            return;
+        }
+
+        Loan existingLoan = _loanService.GetLoanById(loanID);
+        if (existingLoan.LoanID == 0)
+        {
+            Console.WriteLine("Bu ID'ye sahip bir kiralama kaydı bulunamadı.");
+            return;
+        }
+
+        Console.WriteLine($"Mevcut Bilgiler → BookID: {existingLoan.BookID}, MemberID: {existingLoan.MemberID}, LoanDate: {existingLoan.LoanDate}, DueDate: {existingLoan.DueDate}, ReturnDate: {(existingLoan.ReturnDate.HasValue ? existingLoan.ReturnDate.Value.ToString() : "Yok")}");
+
+        Console.Write("Yeni BookID: ");
+        string? bookIdInput = Console.ReadLine();
+        if (int.TryParse(bookIdInput, out int newBookId))
+            existingLoan.BookID = newBookId;
+
+        Console.Write("Yeni MemberID: ");
+        string? memberIdInput = Console.ReadLine();
+        if (int.TryParse(memberIdInput, out int newMemberId))
+            existingLoan.MemberID = newMemberId;
+
+        Console.Write("Yeni LoanDate (yyyy-MM-dd): ");
+        string? loanDateInput = Console.ReadLine();
+        if (DateTime.TryParse(loanDateInput, out DateTime newLoanDate))
+            existingLoan.LoanDate = newLoanDate;
+
+        Console.Write("Yeni DueDate (yyyy-MM-dd): ");
+        string? dueDateInput = Console.ReadLine();
+        if (DateTime.TryParse(dueDateInput, out DateTime newDueDate))
+            existingLoan.DueDate = newDueDate;
+
+        Console.Write("Yeni ReturnDate (yyyy-MM-dd) (boşsa null olur): ");
+        string? returnDateInput = Console.ReadLine();
+        if (DateTime.TryParse(returnDateInput, out DateTime newReturnDate))
+            existingLoan.ReturnDate = newReturnDate;
+        else
+            existingLoan.ReturnDate = null;
+
+        int result = _loanService.UpdateLoan(existingLoan);
+        if (result > 0)
+        {
+            Console.WriteLine("Kiralama kaydı başarıyla güncellendi.");
+        }
+        else
+        {
+            Console.WriteLine("Güncelleme işlemi sırasında bir hata oluştu.");
+        }
+    }
+
     // Buradan sonraki listeleme metotlarında tüm veriyi çekip
     // uygulama üzerinde filtreleme yapacağım. Bu çok verimli bir yöntem olmayabilir.
     // Fakat tüm filtrelemeler için service katmanında yeni metotlar yazıp
@@ -223,10 +302,28 @@ public class LoanOperations
             Console.WriteLine("Kiralık Kitapları getirirken bir hata oluştu. " + ex.Message);
         }
     }
-    private void ListAllLoanedBooks() // Şu anda kirada olan tüm kitapları listeler
-    { }
-    private void ListMembersWithActiveLoans() { /* Üzerinde aktif kitap olan üyeleri listeler */ }
-    private void ListMemberLoanHistoryWithDetails() { /* Belirli bir üyenin tüm kiralama geçmişini listeler */ }
-    private void ListTop10MostLoanedBooks() { /* En çok kiralanan 10 kitabı listeler */ }
-    private void ListTop10MembersWhoLoanedMost() { /* En çok kitap kiralayan 10 üyeyi listeler */ }
+    private void ListCurrentlyLoanedBooks() // Şu anda kirada olan tüm kitapları listeler
+    {
+        System.Console.WriteLine("Kirada bulunan kitap listesi");
+        List<Loan> currentLoans = _loanService.GetCurrentLoans();
+        foreach (var loan in currentLoans)
+        {
+            Book book = _bookService.GetBookById(loan.BookID);
+            Console.WriteLine($"LoanID: {loan.LoanID}, Üye: {_memberService.GetMemberFullNameByID(loan.MemberID)}, Kitap: {book.Title}, Kiralama Tarihi: {loan.LoanDate}, Son teslim tarihi: {loan.DueDate}");
+        }
+
+    }
+    private void ListMembersWithActiveLoans() //Şu anda kitap kiralamış üye bilgileri
+    {
+        System.Console.WriteLine("Kirada bulunan kitap listesi");
+        List<Loan> currentLoans = _loanService.GetCurrentLoans();
+        foreach (var loan in currentLoans)
+        {
+            Book book = _bookService.GetBookById(loan.BookID);
+            Member member = _memberService.GetMemberById(loan.MemberID);
+            Console.WriteLine($"MemberID: {loan.MemberID}, Üye Adı: {member.FirstName}, Üye Soyadı: {member.LastName}, Üye Tel-No: {member.Phone}, Üye Mail: {member.Email}");
+        }
+    }
+
+
 }
