@@ -23,16 +23,21 @@ Kitap işlemleri ekranı:
 ![BookOperations](screenshots/BookOperations.png)
 
 Yazar işlemleri ekranı:
+
 ![AuthorOperations](screenshots/AuthorOperations.png)
 
 Kiralama işlemleri ekranı:
+
 ![LoanOperations](screenshots/LoanOperations.png)
 
 Üye işlemleri ekranı:
+
 ![MemberOperations](screenshots/MemberOperations.png)
 
 Database diagram:
+
 ![DatabaseDiagram](screenshots/DatabaseDiagram.png)
 
 Database Structures:
+
 ![DatabaseStructures](screenshots/DatabaseStructures.png)
