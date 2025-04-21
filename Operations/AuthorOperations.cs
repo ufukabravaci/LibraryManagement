@@ -29,8 +29,7 @@ public class AuthorOperations
             Console.WriteLine("4 - Bütün Yazarları Getir");
             Console.WriteLine("5 - ID ile Yazar Getir");
             Console.WriteLine("6 - En çok kitabı kiralanmış 10 yazar");
-            Console.WriteLine("7 - En çok kitabı bulunan yazar");
-            Console.WriteLine("6 - Ana Menüye Dön");
+            Console.WriteLine("7 - Ana Menüye Dön");
             Console.Write("Lütfen bir işlem seçin: ");
 
             string? authorMenuSelection = Console.ReadLine();
@@ -53,6 +52,9 @@ public class AuthorOperations
                     GetAuthorById();
                     break;
                 case "6":
+                    GetMostLoaned10Authors();
+                    break;
+                case "7":
                     isAuthorMenuActive = false;
                     Console.WriteLine("Ana menüye dönülüyor...");
                     break;
@@ -71,19 +73,13 @@ public class AuthorOperations
         string? firstName = Console.ReadLine();
         Console.Write("Yazar Soyadı: ");
         string? lastName = Console.ReadLine();
-        if (!string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName))
-        {
-            Author newAuthor = new Author { FirstName = firstName, LastName = lastName };
-            int result = _authorService.AddAuthor(newAuthor);
-            if (result > 0)
-                Console.WriteLine("Yazar başarıyla eklendi.");
-            else
-                Console.WriteLine("Yazar eklenirken bir hata oluştu.");
-        }
+        Author newAuthor = new Author { FirstName = firstName, LastName = lastName };
+        int result = _authorService.AddAuthor(newAuthor);
+        if (result > 0)
+            Console.WriteLine("Yazar başarıyla eklendi.");
         else
-        {
-            Console.WriteLine("Yazar adı ve soyadı boş olamaz.");
-        }
+            Console.WriteLine("Yazar eklenirken bir hata oluştu.");
+
     }
 
     private void DeleteAuthor()
@@ -114,19 +110,13 @@ public class AuthorOperations
             string? newFirstName = Console.ReadLine();
             Console.Write("Yeni Yazar Soyadı: ");
             string? newLastName = Console.ReadLine();
-            if (!string.IsNullOrEmpty(newFirstName) && !string.IsNullOrEmpty(newLastName))
-            {
-                Author updatedAuthor = new Author { AuthorId = id, FirstName = newFirstName, LastName = newLastName };
-                int result = _authorService.UpdateAuthor(updatedAuthor);
-                if (result > 0)
-                    Console.WriteLine($"ID: {id} olan yazar başarıyla güncellendi.");
-                else
-                    Console.WriteLine($"ID: {id} olan yazar bulunamadı veya güncellenirken bir hata oluştu.");
-            }
+            Author updatedAuthor = new Author { AuthorId = id, FirstName = newFirstName, LastName = newLastName };
+            int result = _authorService.UpdateAuthor(updatedAuthor);
+            if (result > 0)
+                Console.WriteLine($"ID: {id} olan yazar başarıyla güncellendi.");
             else
-            {
-                Console.WriteLine("Yazar adı ve soyadı boş olamaz.");
-            }
+                Console.WriteLine($"ID: {id} olan yazar bulunamadı veya güncellenirken bir hata oluştu.");
+
         }
         else
         {
@@ -170,6 +160,24 @@ public class AuthorOperations
         else
         {
             Console.WriteLine("Geçersiz ID formatı.");
+        }
+    }
+
+//view kullanır.
+    private void GetMostLoaned10Authors()
+    {
+        System.Console.WriteLine("En Çok Kitabı kiralanmış 10 Yazar:");
+        List<AuthorLoanCount> authors = _authorService.GetMostLoaned10Authors();
+        if (authors.Count > 0)
+        {
+            foreach (var author in authors)
+            {
+                Console.WriteLine($"ID: {author.AuthorID}, Ad: {author.FirstName}, Soyad: {author.LastName}, Kiralanma Sayısı: {author.TotalLoans}");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Kayıtlı yazar bulunmamaktadır.");
         }
     }
 }

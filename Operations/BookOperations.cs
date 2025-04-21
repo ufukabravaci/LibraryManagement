@@ -28,10 +28,11 @@ public class BookOperations
             Console.WriteLine("2 - Kitap Sil");
             Console.WriteLine("3 - Kitap Bilgilerini Güncelle");
             Console.WriteLine("4 - Bütün Kitapları Getir");
-            Console.WriteLine("5 - ID ile Kitap Getir");
+            Console.WriteLine("5 - ID ile Kitap Getir"); //Procedure kullanır.
             Console.WriteLine("6 - Kitap İsmi ile Kitap Getir");
-            Console.WriteLine("7 - En çok kiralanmış 10 kitap");
-            Console.WriteLine("8 - Ana Menüye Dön");
+            Console.WriteLine("7 - Tüm Kitaplar ve Yazarlarını Getir"); //View Kullanır.
+            Console.WriteLine("8 - En çok kiralanmış 10 kitap"); //Database'de tanımlı bir fonksyion kullanıyor.
+            Console.WriteLine("9 - Ana Menüye Dön");
             Console.Write("Lütfen bir işlem seçin: ");
 
             string? bookMenuSelection = Console.ReadLine();
@@ -57,9 +58,12 @@ public class BookOperations
                     GetBooksByTitle();
                     break;
                 case "7":
-                    GetMostLoaned10Books();
+                    GetBooksWithAuthors();
                     break;
                 case "8":
+                    GetMostLoaned10Books();
+                    break;
+                case "9":
                     isBookMenuActive = false;
                     Console.WriteLine("Ana menüye dönülüyor...");
                     break;
@@ -165,6 +169,7 @@ public class BookOperations
         }
     }
 
+    //Bir procedure kullanır.
     private void GetBookById()
     {
         System.Console.WriteLine("ID ile kitap getirme işlemi");
@@ -210,6 +215,25 @@ public class BookOperations
         else System.Console.WriteLine("Geçerli bir kitap ismi giriniz.");
     }
 
+    //Bu metot bir database'de tanımlı bir view kulanıyor. Bu view kitap ve yazar bilgilerini birleştiriyor.
+    //Bir kitabın birden fazla yazarı olabilir bu sebeple bir kitap için birden fazla sonuç dönebilir.
+    //Son eklediğim kitaplar bu sebeple birden fazla dönüyor.
+    private void GetBooksWithAuthors()
+    {
+        System.Console.WriteLine("Kitaplar ve Yazarları Tablosu");
+        List<BookWithAuthors> books = _bookService.GetBooksWithAuthors();
+        if (books.Count > 0)
+        {
+            foreach (var book in books)
+            {
+                System.Console.WriteLine($"ID: {book.BookID}, Adı: {book.Title}, ISBN: {book.ISBN}, Yayın Yılı: {book.PublicationYear}, Yazar Adı: {book.AuthorName}, Yazar Soyadı: {book.AuthorLastName}");
+            }
+        }
+        else
+        {
+            System.Console.WriteLine("Kayıtlı kitap bulunmamaktadır.");
+        }
+    }
 
     private void GetMostLoaned10Books()
     {

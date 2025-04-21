@@ -47,6 +47,7 @@ public class MemberService
             command.Parameters.AddWithValue("LastName", member.LastName);
             command.Parameters.AddWithValue("Email", member.Email);
             command.Parameters.AddWithValue("Phone", member.Phone);
+            command.Parameters.AddWithValue("MemberID", member.MemberId);
             result = command.ExecuteNonQuery();
         }
         catch (SqlException ex)
@@ -68,7 +69,7 @@ public class MemberService
             string query = "DELETE FROM MEMBERS WHERE MemberID= @MemberID";
             SqlCommand command = new SqlCommand(query, _db.GetConnection());
             command.Parameters.AddWithValue("@MemberID", id);
-            result = command.ExecuteNonQuery(); // etkilenen satır sayısını döndürür
+            result = command.ExecuteNonQuery(); 
         }
         catch (SqlException ex)
         {
@@ -116,8 +117,11 @@ public class MemberService
         Member member = new();
         try
         {
-            string query = "SELECT * FROM Members WHERE MemberID = @MemberID";
-            SqlCommand command = new(query, _db.GetConnection());
+            SqlCommand command = new SqlCommand(){
+                CommandText = "sp_GetMemberDetails",
+                CommandType = System.Data.CommandType.StoredProcedure,
+                Connection = _db.GetConnection()
+            };
             command.Parameters.AddWithValue("@MemberID", memberID);
             SqlDataReader reader = command.ExecuteReader();
             if (reader.Read())
@@ -164,5 +168,76 @@ public class MemberService
             _db.CloseConnection();
         }
         return fullName !=null ? fullName : "";
+    }
+
+    public List<MemberLoanDate> GetMembersHasCurrentLoan() // view kullanır.
+    {
+        List<MemberLoanDate> members = new();
+        try
+        {
+            string query = "SELECT * FROM vw_CurrentLoans";
+            SqlCommand command = new(query, _db.GetConnection());
+            SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                MemberLoanDate member = new();
+                member.MemberID = Convert.ToInt32(reader["MemberID"]);
+                member.MemberFirstName = reader["MemberFirstName"].ToString();
+                member.MemberLastName = reader["MemberLastName"].ToString();
+                member.LoanDate = Convert.ToDateTime(reader["LoanDate"]);
+                members.Add(member);
+            }
+            reader.Close();
+        }
+        catch (SqlException ex)
+        {
+            System.Console.WriteLine("Veritabanı hatası: " + ex.Message);
+        }
+        finally
+        {
+            _db.CloseConnection();
+        }
+        return members;
+    }
+
+    public List<MemberLoanDetail> GetLoansByMemberId(int memberID) //Procedure kullanır.
+    {
+        List<MemberLoanDetail> loans = new();
+        try
+        {
+            SqlCommand command = new SqlCommand()
+            {
+                CommandText = "sp_GetLoansByMember",
+                CommandType = System.Data.CommandType.StoredProcedure,
+                Connection = _db.GetConnection()
+            };
+            command.Parameters.AddWithValue("@MemberID", memberID);
+            SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                MemberLoanDetail loan = new()
+                {
+                    MemberID = Convert.ToInt32(reader["MemberID"]),
+                    LoanID = Convert.ToInt32(reader["LoanID"]),
+                    BookID = Convert.ToInt32(reader["BookID"]),
+                    LoanDate = Convert.ToDateTime(reader["LoanDate"]),
+                    ReturnDate = reader["ReturnDate"] as DateTime?,
+                    DueDate = Convert.ToDateTime(reader["DueDate"]),
+                    BookTitle = reader["BookTitle"].ToString(),
+                    AuthorFirstName = reader["AuthorFirstName"].ToString(),
+                    AuthorLastName = reader["AuthorLastName"].ToString()
+                };
+                loans.Add(loan);
+            }
+        }
+        catch (SqlException ex)
+        {
+            System.Console.WriteLine("Veritabanı hatası: " + ex.Message);
+        }
+        finally
+        {
+            _db.CloseConnection();
+        }
+        return loans;
     }
 }

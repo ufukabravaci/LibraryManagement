@@ -242,11 +242,6 @@ public class LoanOperations
         }
     }
 
-    // Buradan sonraki listeleme metotlarında tüm veriyi çekip
-    // uygulama üzerinde filtreleme yapacağım. Bu çok verimli bir yöntem olmayabilir.
-    // Fakat tüm filtrelemeler için service katmanında yeni metotlar yazıp
-    // yeni queryler yazmak çok fazla vaktimi alacak.
-
 
     //Bu metot veritabanında oluşturulmuş bir fonksiyon kullanmaktadır.
     // (aslında memberservice kullanıyor. burada memberserviste fonksiyonu kullanılan metotu kullanıyoruz.)

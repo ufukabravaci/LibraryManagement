@@ -25,13 +25,13 @@ public class Member
     }
 
     // id'li veri okuma için ctor
-    public Member(int memberId, string firstName, string lastName, string email, string phone, DateTime registrationDate)
+    public Member(int memberId, string firstName, string lastName, string email, string phone)
     {
         MemberId = memberId;
         FirstName = firstName;
         LastName = lastName;
         Email = email;
         Phone = phone;
-        RegistrationDate = registrationDate;
+        RegistrationDate = DateTime.Now;
     }
 }

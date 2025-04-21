@@ -1,3 +1,4 @@
+using System.Data;
 using LibraryManagement.Models;
 using LibraryManagement.Utils;
 using Microsoft.Data.SqlClient;
@@ -42,7 +43,7 @@ public class BookService
             string query = "DELETE FROM BOOKS WHERE BookID = @BookId";
             SqlCommand command = new(query, _db.GetConnection());
             command.Parameters.AddWithValue("@BookId", id);
-            result = Convert.ToInt32(command.ExecuteScalar()); // id'yi aldık.
+            result = command.ExecuteNonQuery(); // id'yi aldık.
         }
         catch (SqlException ex)
         {
@@ -106,13 +107,18 @@ public class BookService
         return books;
     }
 
+    //Bu metot Procedure kullanarak kitap bilgilerini getirir.
     public Book GetBookById(int bookId)
     {
         Book book = new();
         try
         {
-            string query = "SELECT * FROM Books WHERE BookID = @BookID";
-            SqlCommand command = new(query, _db.GetConnection());
+            SqlCommand command = new SqlCommand()
+            {
+                CommandText = "sp_GetBookDetails",
+                CommandType = CommandType.StoredProcedure,
+                Connection = _db.GetConnection()
+            };
             command.Parameters.AddWithValue("@BookID", bookId);
             SqlDataReader reader = command.ExecuteReader();
             if (reader.Read())
@@ -145,7 +151,7 @@ public class BookService
             SqlDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
-                Book book = new Book
+                Book book = new Book //veri okumak için oluşturduğumuz id'li ctor kullandık
                 {
                     BookId = Convert.ToInt32(reader["BookID"]),
                     Title = reader["Title"].ToString(),
@@ -166,7 +172,7 @@ public class BookService
         return books;
     }
 
-    //Bu metot yazdığım uygulamadaki en karışık query'e ait.
+    //Bu metot yazdığım uygulamadaki en karışık query'i kullanıyor.
     //Database'de tanımlı olan bir fonksiyonu kullanıyor.
     //Veriyi karşılayabilmek için yeni bir model oluşturdum.
     public List<MostLoanedBook> Get10MostLoanedBooks()
@@ -220,4 +226,36 @@ public class BookService
         return books;
     }
 
+    // BU metot database'de tanımlı bir view kullanıyor. Bu view kitap ve yazar bilgilerini birleştiriyor
+    public List<BookWithAuthors> GetBooksWithAuthors()
+    {
+        List<BookWithAuthors> books = new();
+        try
+        {
+            string query = "SELECT * FROM vw_BooksWithAuthors";
+            SqlCommand command = new(query, _db.GetConnection());
+            SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                BookWithAuthors book = new();
+                book.BookID = Convert.ToInt32(reader["BookID"]);
+                book.Title = reader["Title"].ToString();
+                book.ISBN = reader["ISBN"].ToString();
+                book.PublicationYear = Convert.ToInt32(reader["PublicationYear"]);
+                book.AuthorID = Convert.ToInt32(reader["AuthorID"]);
+                book.AuthorName = reader["AuthorName"].ToString();
+                book.AuthorLastName = reader["AuthorLastName"].ToString();
+                books.Add(book);
+            }
+        }
+        catch (SqlException ex)
+        {
+            System.Console.WriteLine("Veritabanı hatası: " + ex.Message);
+        }
+        finally
+        {
+            _db.CloseConnection();
+        }
+        return books;
+    }
 }

@@ -14,6 +14,7 @@ var memberService = new MemberService(db);
 var bookOperations = new BookOperations(bookService);
 var authorOperations = new AuthorOperations(authorService);
 var loanOperations = new LoanOperations(loanService, bookService, memberService);
+var memberOperations = new MemberOperations(memberService);
 
 while (isMainMenuActive)
 {
@@ -41,7 +42,7 @@ while (isMainMenuActive)
             loanOperations.LoanOperationsMenu();
             break;
         case "4":
-            MemberOperationsMenu();
+            memberOperations.MemberOperationsMenu();
             break;
         case "5":
             isMainMenuActive = false;
@@ -53,12 +54,4 @@ while (isMainMenuActive)
     }
 
     Console.WriteLine();
-}
-
-
-
-
-void MemberOperationsMenu()
-{
-    Console.WriteLine("Üye İşlemleri Menüsü (Henüz implemente edilmedi)");
 }
