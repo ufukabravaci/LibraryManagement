@@ -8,7 +8,7 @@ CRUD işlemlerini ve gelişmiş sorgulama sistemlerini uygulamanıza olanak sağ
 - C#
 - ADO.NET
 - SQL Server
-- .NET 9.0 (veya hangi sürümse)
+- .NET 9.0
 - Konsol Uygulaması (Console App)
 - Veritabanı işlemleri:ADO.NET ile bağlantı,Viewlar, User Defined functionlar,Stored Procedureler
 
