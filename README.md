@@ -14,31 +14,31 @@ CRUD işlemlerini ve gelişmiş sorgulama sistemlerini uygulamanıza olanak sağ
 
 ## 📸 Ekran Görüntüleri
 
-Ana menü görünümü:
+ ### Ana menü görünümü:
 
 ![MainMenu](screenshots/MainMenu.png)
 
-Kitap işlemleri ekranı:
+### Kitap işlemleri ekranı:
 
 ![BookOperations](screenshots/BookOperations.png)
 
-Yazar işlemleri ekranı:
+### Yazar işlemleri ekranı:
 
 ![AuthorOperations](screenshots/AuthorOperations.png)
 
-Kiralama işlemleri ekranı:
+### Kiralama işlemleri ekranı:
 
 ![LoanOperations](screenshots/LoanOperations.png)
 
-Üye işlemleri ekranı:
+### Üye işlemleri ekranı:
 
 ![MemberOperations](screenshots/MemberOperations.png)
 
-Database diagram:
+### Database diagram:
 
 ![DatabaseDiagram](screenshots/DatabaseDiagram.png)
 
-Database Structures:
+### Database Structures:
 
 ![DatabaseStructures](screenshots/DatabaseStructures.png)
 
