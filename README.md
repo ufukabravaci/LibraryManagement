@@ -47,7 +47,7 @@ CRUD işlemlerini ve gelişmiş sorgulama sistemlerini uygulamanıza olanak sağ
 
 Projeyi kullanmadan önce aşağıdaki adımları takip ederek veritabanınızı oluşturabilirsiniz.
 
-📁 1. .bak Dosyası ile Kurulum (Tavsiye Edilen)
+### 📁 1. .bak Dosyası ile Kurulum (Tavsiye Edilen)
 
 Bu yöntem, veritabanı yapısını ve verileri eksiksiz olarak yükler.
 
@@ -66,7 +66,7 @@ Veritabanı adını LibraryManagement olarak belirleyin.
 ⚠️ Not: Projede yer alan _connectionString doğrudan LibraryManagement isimli veritabanına bağlandığı için, bağlantı ayarında ekstra bir değişiklik yapmanıza gerek yoktur.
 ⚠️ Not: Farklı bir veritabanı adı kullanırsanız, DB.cs dosyasındaki _connectionString içindeki Database=... alanını güncellemeniz gerekir.
 
-🔧 2. .sql Scripti ile Kurulum (Alternatif Yöntem)
+### 🔧 2. .sql Scripti ile Kurulum (Alternatif Yöntem)
 
 Eğer .bak dosyasını kullanarak restore işlemi yapamıyorsanız, bu seçeneği kullanarak yalnızca veritabanı yapısını oluşturabilirsiniz. (Veriler bu yöntemle yüklenmez!)
 
@@ -84,7 +84,7 @@ Tüm tabloların ve yapıların oluştuğundan emin olun.
 
 ⚠️ Not: Farklı bir veritabanı adı kullanırsanız, DB.cs dosyasındaki _connectionString içindeki Database=... alanını güncellemeniz gerekir.
 
-🔹 Özet
+### 🔹 Özet
 
 📅 .bak dosyası kullanırsanız verilerle birlikte tam veritabanı kurarsınız.
 
