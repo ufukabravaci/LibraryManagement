@@ -47,11 +47,11 @@ CRUD işlemlerini ve gelişmiş sorgulama sistemlerini uygulamanıza olanak sağ
 
 Projeyi kullanmadan önce aşağıdaki adımları takip ederek veritabanınızı oluşturabilirsiniz.
 
-### 📁 1. .bak Dosyası ile Kurulum (Tavsiye Edilen)
+### 📁 1. `.bak` Dosyası ile Kurulum (**Tavsiye Edilen**)
 
 Bu yöntem, veritabanı yapısını ve verileri eksiksiz olarak yükler.
 
-Adımlar:
+**Adımlar:**
 
 SQL Server Management Studio'yu (SSMS) açın.
 
@@ -63,14 +63,15 @@ Restore işlemini başlatın.
 
 Veritabanı adını LibraryManagement olarak belirleyin.
 
-⚠️ Not: Projede yer alan _connectionString doğrudan LibraryManagement isimli veritabanına bağlandığı için, bağlantı ayarında ekstra bir değişiklik yapmanıza gerek yoktur.
-⚠️ Not: Farklı bir veritabanı adı kullanırsanız, DB.cs dosyasındaki _connectionString içindeki Database=... alanını güncellemeniz gerekir.
+> ⚠️ **Not:** Projede yer alan `_connectionString` doğrudan `LibraryManagement` isimli veritabanına bağlandığı için, bağlantı ayarında ekstra bir değişiklik yapmanıza gerek yoktur.
+> ⚠️ **Not:** Farklı bir veritabanı adı kullanırsanız, `DB.cs` dosyasındaki `_connectionString` içinde yer alan `Database=...` alanını güncellemeniz gerekir.
 
-### 🔧 2. .sql Scripti ile Kurulum (Alternatif Yöntem)
+
+### 🔧 2. `.sql` Scripti ile Kurulum (**Alternatif Yöntem**)
 
 Eğer .bak dosyasını kullanarak restore işlemi yapamıyorsanız, bu seçeneği kullanarak yalnızca veritabanı yapısını oluşturabilirsiniz. (Veriler bu yöntemle yüklenmez!)
 
-Adımlar:
+**Adımlar:**
 
 SQL Server Management Studio'yu (SSMS) açın.
 
@@ -82,12 +83,11 @@ LibraryManagement.sql dosyasını açıp çalıştırın.
 
 Tüm tabloların ve yapıların oluştuğundan emin olun.
 
-⚠️ Not: Farklı bir veritabanı adı kullanırsanız, DB.cs dosyasındaki _connectionString içindeki Database=... alanını güncellemeniz gerekir.
+> ⚠️ **Not:** Farklı bir veritabanı adı kullanırsanız, `DB.cs` dosyasındaki `_connectionString` içinde yer alan `Database=...` alanını güncellemeniz gerekir.
 
-### 🔹 Özet
+### 📝 Özet
 
-📅 .bak dosyası kullanırsanız verilerle birlikte tam veritabanı kurarsınız.
+* 📅 `.bak` dosyası kullanırsanız verilerle birlikte tam veritabanı kurarsınız.
+* 🖊️ `.sql` scripti kullanırsanız sadece tablo yapıları oluşur.
 
-🖊️ .sql scripti kullanırsanız sadece tablo yapıları oluşur.
-
-📢 Tavsiyemiz: Mümkünse .bak dosyası ile restore işlemi yapın, bu sayede projeyi içinde veri bulunan bir veritabanı ile hazır kullanabilirsiniz.
+📢 **Tavsiyemiz:** Mümkünse `.bak` dosyası ile restore işlemi yapın, bu sayede projeyi içinde veri bulunan bir veritabanı ile hazır kullanabilirsiniz.
