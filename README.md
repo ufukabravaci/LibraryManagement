@@ -41,3 +41,17 @@ Database diagram:
 Database Structures:
 
 ![DatabaseStructures](screenshots/DatabaseStructures.png)
+
+
+## 🗄️ Veritabanı Kurulumu
+
+Projeyi kullanmadan önce `LibraryDB.sql` dosyasını çalıştırarak veritabanı yapısını oluşturmanız gerekmektedir.
+
+Adımlar:
+1. SQL Server Management Studio açın.
+2. **İsmi tam olarak `LibraryManagement` olan bir veritabanı oluşturun.**
+3. `Database/LibraryDB.sql` dosyasını açıp çalıştırın.
+4. Proje içindeki bağlantı ayarı (`_connectionString`) doğrudan `LibraryManagement` veritabanına yönlendirildiği için ek bir değişiklik yapmanıza gerek yoktur.
+
+> **Not:** Eğer farklı isimde veritabanı oluşturursanız, `DB.cs` dosyasında `_connectionString` içindeki `Database=...` kısmını güncellemeniz gerekir.
+
