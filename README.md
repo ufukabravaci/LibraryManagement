@@ -43,7 +43,7 @@ Database Structures:
 ![DatabaseStructures](screenshots/DatabaseStructures.png)
 
 
-##Veritabanı Kurulumu
+## 🗄️ Veritabanı Kurulumu
 
 Projeyi kullanmadan önce aşağıdaki adımları takip ederek veritabanınızı oluşturabilirsiniz.
 
