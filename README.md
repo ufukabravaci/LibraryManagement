@@ -43,15 +43,51 @@ Database Structures:
 ![DatabaseStructures](screenshots/DatabaseStructures.png)
 
 
-## 🗄️ Veritabanı Kurulumu
+##Veritabanı Kurulumu
 
-Projeyi kullanmadan önce `LibraryDB.sql` dosyasını çalıştırarak veritabanı yapısını oluşturmanız gerekmektedir.
+Projeyi kullanmadan önce aşağıdaki adımları takip ederek veritabanınızı oluşturabilirsiniz.
+
+📁 1. .bak Dosyası ile Kurulum (Tavsiye Edilen)
+
+Bu yöntem, veritabanı yapısını ve verileri eksiksiz olarak yükler.
 
 Adımlar:
-1. SQL Server Management Studio açın.
-2. **İsmi tam olarak `LibraryManagement` olan bir veritabanı oluşturun.**
-3. `Database/LibraryDB.sql` dosyasını açıp çalıştırın.
-4. Proje içindeki bağlantı ayarı (`_connectionString`) doğrudan `LibraryManagement` veritabanına yönlendirildiği için ek bir değişiklik yapmanıza gerek yoktur.
 
-> **Not:** Eğer farklı isimde veritabanı oluşturursanız, `DB.cs` dosyasında `_connectionString` içindeki `Database=...` kısmını güncellemeniz gerekir.
+SQL Server Management Studio'yu (SSMS) açın.
 
+"Databases" bölümüne sağ tıklayın ve Restore Database... seçeneğine tıklayın.
+
+Device seçeneğini işaretleyin ve LibraryManagement.bak dosyasını ekleyin.
+
+Restore işlemini başlatın.
+
+Veritabanı adını LibraryManagement olarak belirleyin.
+
+⚠️ Not: Projede yer alan _connectionString doğrudan LibraryManagement isimli veritabanına bağlandığı için, bağlantı ayarında ekstra bir değişiklik yapmanıza gerek yoktur.
+⚠️ Not: Farklı bir veritabanı adı kullanırsanız, DB.cs dosyasındaki _connectionString içindeki Database=... alanını güncellemeniz gerekir.
+
+🔧 2. .sql Scripti ile Kurulum (Alternatif Yöntem)
+
+Eğer .bak dosyasını kullanarak restore işlemi yapamıyorsanız, bu seçeneği kullanarak yalnızca veritabanı yapısını oluşturabilirsiniz. (Veriler bu yöntemle yüklenmez!)
+
+Adımlar:
+
+SQL Server Management Studio'yu (SSMS) açın.
+
+"Databases" bölümüne sağ tıklayın ve New Database... seçeneğine tıklayın.
+
+Veritabanı adını LibraryManagement olarak belirleyin ve oluşturun.
+
+LibraryManagement.sql dosyasını açıp çalıştırın.
+
+Tüm tabloların ve yapıların oluştuğundan emin olun.
+
+⚠️ Not: Farklı bir veritabanı adı kullanırsanız, DB.cs dosyasındaki _connectionString içindeki Database=... alanını güncellemeniz gerekir.
+
+🔹 Özet
+
+📅 .bak dosyası kullanırsanız verilerle birlikte tam veritabanı kurarsınız.
+
+🖊️ .sql scripti kullanırsanız sadece tablo yapıları oluşur.
+
+📢 Tavsiyemiz: Mümkünse .bak dosyası ile restore işlemi yapın, bu sayede projeyi içinde veri bulunan bir veritabanı ile hazır kullanabilirsiniz.
