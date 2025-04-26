@@ -64,6 +64,7 @@ Restore işlemini başlatın.
 Veritabanı adını LibraryManagement olarak belirleyin.
 
 > ⚠️ **Not:** Projede yer alan `_connectionString` doğrudan `LibraryManagement` isimli veritabanına bağlandığı için, bağlantı ayarında ekstra bir değişiklik yapmanıza gerek yoktur.
+
 > ⚠️ **Not:** Farklı bir veritabanı adı kullanırsanız, `DB.cs` dosyasındaki `_connectionString` içinde yer alan `Database=...` alanını güncellemeniz gerekir.
 
 
