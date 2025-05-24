@@ -18,17 +18,4 @@ public class MemberLoanDetail
         ReturnDate = null; // Hata oluşmasını engellemek amacıyla returnDate başlangıçta null 
     }
 
-    // Tüm parametreleri alan constructor
-    public MemberLoanDetail(int memberID, int loanID, int bookID, DateTime loanDate, DateTime? returnDate, DateTime dueDate, string bookTitle, string authorFirstName, string authorLastName)
-    {
-        MemberID = memberID;
-        LoanID = loanID;
-        BookID = bookID;
-        LoanDate = loanDate;
-        ReturnDate = returnDate;
-        DueDate = dueDate;
-        BookTitle = bookTitle;
-        AuthorFirstName = authorFirstName;
-        AuthorLastName = authorLastName;
-    }
 }
